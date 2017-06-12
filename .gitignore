@@ -1,0 +1,9 @@
+*.service
+*.conf
+*.pyc
+*.log
+Caddyfile
+*.pid
+*.pkl
+public/assets/images/profile_pics/*
+public/assets/fonts/*.ttf

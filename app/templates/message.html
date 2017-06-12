@@ -1,0 +1,18 @@
+{% extends "highlight.html" %}
+{% block title %}你有一条新消息{% endblock %}
+
+{% block content_title %}
+<h1>
+    {{title}}
+</h1>
+{% endblock %}
+
+{% block content_content %}
+
+{% for message in messages %}
+<h2>
+    {{ message }}
+</h2>
+<br>
+{% endfor %}
+{% endblock %}

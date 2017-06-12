@@ -1,0 +1,23 @@
+{% extends "frame.html" %}
+{% block title %}Comment-Discubot{% endblock %}
+
+{% block content_frame %}
+<h2>
+    <a href='/comments/player/{{player_index}}'>
+        {{player_index}}号玩家</a>
+    {% if day == 0 %}
+        的<a href='/comments/day/{{day}}'>警上发言</a>：
+    {% else %}
+        <a href='/comments/day/{{day}}'>第{{day}}天</a>的发言：
+    {% endif %}
+</h2>
+
+<div class='main-text'>
+    {% for p in paragraphs %}
+        <p>
+            {{ p }}
+        </p>
+    {% endfor %}
+</div>
+<img id='hontai-small' src='/assets/images/o3.png'/>
+{% endblock %}

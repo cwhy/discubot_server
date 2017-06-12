@@ -1,0 +1,39 @@
+{% extends "frame.html" %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content_frame %}
+<h2>
+    {{title}}
+</h2>
+
+<ul class="comments">
+{% for c in comments %}
+    <li class="comments-item">
+        {% if show_day %}
+        <a class='ci-day block' href="/comments/day/{{c.day}}">
+            {% if c.day == 0 %}
+                警上
+            {% else %}
+                Day {{c.day}}
+            {% endif %}
+        </a>
+        {% endif %}
+        {% if show_player %}
+        <a class='ci-player block' href="/comments/player/{{c.player.index}}">
+            {{c.player.index}}
+            <img class="cip-pic" src="{{c.player.profile_pic}}" />
+        </a>
+        {% endif %}
+        <a class='ci-content block' href="/comment/{{c.id}}">
+            {% for p in c.paragraphs %}
+                <p>
+                    {{ p }}
+                </p>
+            {% endfor %}
+        </a>
+    </li>
+{% endfor %}
+</ul>
+<img id='hontai-small' src='/assets/images/o3.png'/>
+{% endblock %}
