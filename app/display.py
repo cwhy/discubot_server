@@ -18,6 +18,11 @@ def static_page(name):
     return render_template(name)
 
 
+def game_state(game):
+    return render_template('game_state.html',
+                           game=game)
+
+
 def comment(game, c_id):
     try:
         comment = game.comments[c_id]
@@ -28,6 +33,17 @@ def comment(game, c_id):
                                player_index=comment.player.index,
                                day=comment.day,
                                paragraphs=comment.paragraphs)
+
+
+def players(game):
+    _players = game.players
+    _players_dict = {_p.index: _p for _p in _players}
+    _indices = sorted(_players_dict.keys())
+    _title = '演员表'
+    return render_template('players.html',
+                           title=_title,
+                           player_indices=_indices,
+                           players_dict=_players_dict)
 
 
 def comments(game, player_index=None, day=None):

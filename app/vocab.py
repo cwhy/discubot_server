@@ -43,3 +43,10 @@ acknowledge = Vocab(
     ,'嗯'
     ,'[OK]'
     ])
+
+en = Vocab(
+    ['[Coffee]'
+    ,'～'
+    ,'[Loafer]'
+    ,'嗯'
+    ])

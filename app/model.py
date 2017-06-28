@@ -11,15 +11,17 @@ class VerboseObj:
 
 
 class Player():
-    def __init__(self, name, index):
+    def __init__(self, name, index=None):
         self.name = name
         self.index = index
+        self.is_dead = False
         self.profile_pic = f'/assets/images/profile_pics/{name}.jpg'
+        self.is_shreff_cadidate = False
         # TODO
         # self.id = 0
 
     def __str__(self):
-        return f'\'{self.name} {self.index}\''
+        return f'\'{self.name}, index={self.index}\''
 
     def __repr__(self):
         return self.__str__()
@@ -29,6 +31,7 @@ class Comment(VerboseObj):
     def __init__(self, player, day, content):
         self.player = player
         self.day = day
+        self.is_shreff_run = False
         self.paragraphs = []
         self.id = None
         if content.strip():
@@ -68,6 +71,7 @@ class Game(VerboseObj):
         self.director_name = ''
         self.current_speaker = None
         self.started = False
+        self.shreff = None
 
     def dawn(self):
         self.isNight = False

@@ -1,0 +1,30 @@
+{% extends "frame.html" %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content_frame %}
+<h2>
+    {{title}}
+</h2>
+
+<ul class="players">
+{% for i in player_indices %}
+    {% set p = players_dict[i] %}
+    <li class="players-item">
+        <div class='player-pic-container'>
+            {% if p.is_dead %}
+            <div class="die-stamp">狗带</div>
+            {% endif %}
+            <img class="player-pic" src="{{p.profile_pic}}" />
+        </div>
+        <div class='player-name'>
+            {{p.name}}
+        </div>
+        <div class='player-index'>
+            {{p.index}}
+        </div>
+    </li>
+{% endfor %}
+</ul>
+<img id='hontai-small' src='/assets/images/o3.png'/>
+{% endblock %}

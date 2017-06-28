@@ -7,3 +7,4 @@ Caddyfile
 *.pkl
 public/assets/images/profile_pics/*
 public/assets/fonts/*.ttf
+gerrit/*

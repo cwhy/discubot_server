@@ -1,5 +1,5 @@
 from flask import Flask, request
-from model import Game
+from model import Game, Player
 import display
 import pickle
 import os
@@ -10,7 +10,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return "Laugh all you want, they are not for sale"
+    msg = "Laugh all you want, they are not for sale"
+    return display.message("Not for sale",
+                           msg)
 
 
 @app.route('/help')
@@ -59,9 +61,47 @@ def list_chat():
     return content
 
 
-@app.route('/game/state', methods=['GET'])
+@app.route('/players', methods=['GET'])
+def display_players():
+    return display.players(game)
+
+
+@app.route('/shreff/assign/<shreff_index_str>', methods=['GET'])
+def assign_shreff(shreff_index_str):
+    game.shreff = game.get_player(index=int(shreff_index_str))
+    msg = 'Shreff has assigned to player ' + shreff_index_str
+    return display.message(msg, ''), 202
+
+
+@app.route('/player/add/<name>/<index_str>', methods=['GET'])
+def add_player(name, index_str):
+    if index_str:
+        player = Player(name, int(index_str))
+        game.add_player(player)
+        msg = f'Player {name} has been added with index {index_str}'
+    else:
+        player = Player(name)
+        game.add_player(player)
+        msg = f'Player {name} has been added'
+    return display.message(msg, ''), 202
+
+
+@app.route('/player/kill/<index_str>', methods=['GET'])
+def kill_player(index_str):
+    player = game.get_player(index=int(index_str))
+    player.is_dead = True
+    msg = f'Player {index_str} has been killed'
+    return display.message(msg, ''), 202
+
+
+@app.route('/game/state/all', methods=['GET'])
 def print_game_state():
     return str(game).replace(',', '<br>')
+
+
+@app.route('/game/state', methods=['GET'])
+def display_game_state():
+    return display.game_state(game)
 
 
 @app.route('/game/save', methods=['GET'])

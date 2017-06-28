@@ -1,6 +1,11 @@
-- True player identification
 - Audio support
-- Chatroom identification
-- Game setup
+- Added sheriff run label for comments
+- Player participation tool
+
+
+#### Low prio
 - Better all chat
-- o3 image scaling
+- Game setup
+- True player identification
+- Moving profile-picture
+- @all player function
