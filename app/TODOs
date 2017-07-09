@@ -1,11 +1,13 @@
 - Audio support
 - Added sheriff run label for comments
 - Player participation tool
+- Script for ad-hoc development
 
 
 #### Low prio
 - Better all chat
 - Game setup
+- Detect useragent to enhance CURL experience
 - True player identification
 - Moving profile-picture
 - @all player function

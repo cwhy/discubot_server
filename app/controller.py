@@ -16,7 +16,7 @@ def build_message(content):
 
 
 def handle_chat(game, chat_obj):
-    speaker_name = chat_obj['ActualNickName']
+    speaker_name = chat_obj['name']
     if chat_obj['isAt'] == 'True':
         content = cu.rm_At(chat_obj['Content'])
 

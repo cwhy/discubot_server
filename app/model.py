@@ -10,7 +10,7 @@ class VerboseObj:
         return self.__str__()
 
 
-class Player():
+class Player:
     def __init__(self, name, index=None):
         self.name = name
         self.index = index

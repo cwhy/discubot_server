@@ -8,3 +8,4 @@ Caddyfile
 public/assets/images/profile_pics/*
 public/assets/fonts/*.ttf
 gerrit/*
+*.swp

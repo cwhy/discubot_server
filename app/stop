@@ -1,0 +1,4 @@
+#!/bin/sh
+
+curl https://discubot.com/game/save
+systemctl --user stop gunicorn
