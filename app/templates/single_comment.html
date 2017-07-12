@@ -1,11 +1,18 @@
 {% extends "frame.html" %}
-{% block title %}Comment-Discubot{% endblock %}
+{% block title %}
+    {{player_index}}号玩家
+    {% if is_shreff_run %}
+        的警上发言：
+    {% else %}
+        第{{day}}天的发言：
+    {% endif %}
+{% endblock %}
 
 {% block content_frame %}
 <h2>
     <a href='/comments/player/{{player_index}}'>
         {{player_index}}号玩家</a>
-    {% if day == 0 %}
+    {% if is_shreff_run %}
         的<a href='/comments/day/{{day}}'>警上发言</a>：
     {% else %}
         <a href='/comments/day/{{day}}'>第{{day}}天</a>的发言：

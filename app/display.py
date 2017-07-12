@@ -32,6 +32,7 @@ def comment(game, c_id):
         return render_template('single_comment.html',
                                player_index=comment.player.index,
                                day=comment.day,
+                               is_shreff_run=comment.is_shreff_run,
                                paragraphs=comment.paragraphs)
 
 
@@ -39,7 +40,7 @@ def players(game):
     _players = game.players
     _players_dict = {_p.index: _p for _p in _players}
     _indices = sorted(_players_dict.keys())
-    _title = '演员表'
+    _title = '角色不明的演员表'
     return render_template('players.html',
                            title=_title,
                            player_indices=_indices,

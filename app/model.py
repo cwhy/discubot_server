@@ -28,10 +28,11 @@ class Player:
 
 
 class Comment(VerboseObj):
-    def __init__(self, player, day, content):
+    def __init__(self, player, day, content, is_suicide=False):
         self.player = player
         self.day = day
         self.is_shreff_run = False
+        self.is_suicide = is_suicide
         self.paragraphs = []
         self.id = None
         if content.strip():
@@ -96,6 +97,15 @@ class Game(VerboseObj):
             raise Exception(f'Player {index} not found!')
         else:
             raise Exception('Bad player request')
+
+    def init_player(self, name, index):
+        try:
+            player = self.get_player(name=name, index=index)
+        except:
+            player = Player(name, index)
+            self.add_player(player)
+        finally:
+            return player
 
     def add_comment(self, comment):
         comment.id = len(self.comments)

@@ -1,4 +1,4 @@
-from model import Comment, Player
+from model import Comment
 from flask import jsonify
 import vocab
 import chat_util as cu
@@ -54,7 +54,7 @@ def handle_director_chat(game, content):
 def handle_targeted_chat(game, content, speaker_name):
     if 'help' in content:
         return build_message('discubot.com/help')
-    elif '发言整理' in content:
+    elif '发言整理' in content or '整理发言' in content:
         return build_message('discubot.com/comments')
     elif '开局' in content:
         if game.started:
@@ -67,13 +67,31 @@ def handle_targeted_chat(game, content, speaker_name):
     elif '天亮' in content:
         if speaker_name == game.director_name:
             game.dawn()
+            game.set_current_speaker(None)
         return build_message(vocab.acknowledge.gen())
     elif '天黑' in content:
         if speaker_name == game.director_name:
             game.dusk()
+            game.set_current_speaker(None)
         return build_message(vocab.acknowledge.gen())
-    elif '号发言' in content:
+    elif '号发言' in content and not ("结束" in content):
         return init_comment(game, content, speaker_name)
+    elif '号自爆' in content:
+        if not game.isNight:
+            game.set_current_speaker(None)
+            player_i = cu.get_ints(content.split('号自爆')[0])[0]
+            content_trimed = content.split('号自爆')[1]
+            player = game.init_player(speaker_name, player_i)
+            player_i.is_dead = True
+            comment = Comment(player, game.day, content_trimed, is_suicide=True)
+            game.add_comment(comment)
+            game.set_current_speaker(None)
+            game.dusk()
+            _message = f'{player_i}号自爆了，夜幕又降临在这个诡异的微信群'
+            return build_message(_message)
+        else:
+            _message = f'如果我没有记错的话，现在是晚上不能自爆...'
+            return build_message(_message)
     elif '过' == content.strip() or '发言结束' in content:
         try:
             player_i = game.current_speaker.index
@@ -93,17 +111,12 @@ def handle_targeted_chat(game, content, speaker_name):
 def init_comment(game, content, speaker_name):
     player_i = cu.get_ints(content.split('号发言')[0])[0]
     content_trimed = content.split('号发言')[1]
-    try:
-        player = game.get_player(index=player_i)
-    except:
-        player = Player(speaker_name, player_i)
-        game.add_player(player)
-    finally:
-        game.set_current_speaker(player)
-        comment = Comment(player, game.day, content_trimed)
-        if game.day == 1:
-            if not game.shreff:
-                player.is_shreff_cadidate = True
-                comment.is_shreff_run = True
-        game.add_comment(comment)
+    player = game.init_player(speaker_name, player_i)
+    game.set_current_speaker(player)
+    comment = Comment(player, game.day, content_trimed)
+    if game.day <= 1:
+        if not game.shreff:
+            player.is_shreff_cadidate = True
+            comment.is_shreff_run = True
+    game.add_comment(comment)
     return build_message(vocab.start_comment.gen())
