@@ -1,0 +1,23 @@
+discubot.com {
+    root /home/owner/Projects/Web/public
+    proxy / localhost:5218 {
+        header_upstream Host {host}
+        header_upstream X-Forwarded-Proto {scheme}
+        header_upstream X-Custom-SSL "true"
+#        without /app
+        except /phpldapadmin /gerrit /assets /humans.txt /robots.txt /favicon.ico
+    }
+    proxy /gerrit localhost:8081 {
+        header_upstream Host {host}
+        header_upstream X-Forwarded-Proto {scheme}
+        header_upstream X-Custom-SSL "true"
+    }
+
+#     rewrite {
+#         to {path} {path}/ /app{path}
+#     }
+    log access.log
+    tls {
+        max_certs 10
+    }
+}
