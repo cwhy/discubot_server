@@ -9,19 +9,31 @@
 
 {% block content_content %}
 <h3>
+    报名阶段：
+</h3>
+<ul>
+    <li>法官说： "开始报名"/“报名开始”并@bot可以进入报名阶段</li>
+    <li>愿意加入游戏的可以发“1”并@bot</li>
+    <li>在开局之前，可以发“0”并@bot退出游戏</li>
+    <li>法官在开局前需要先添加所有参与者</li>
+    <li>"@bot players"可以查看现在报名了的人</li>
+</ul>
+<h3>
     游戏方式：
 </h3>
- <ol class='special-font'>
-    <li>开局时导演说： "开局" 并@bot</li>
-    <li>导演说天亮、天黑时@bot，注意在上警之前要先天黑天亮一次</li>
+ <ul>
+    <li>开局时法官说： "开局" 并@bot</li>
+    <li>法官说天亮、天黑时@bot，注意在上警之前要先天黑天亮一次</li>
     <li>发言前说： "x号发言" 并@bot</li>
     <li>发言后说： "过"或"结束发言" 并@bot</li>
     <li>在天亮时说： "x号自爆" 并@bot会自动进入黑夜</li>
-</ol>
+</ul>
 <h3>
     召唤方式：
 </h3>
-<ol class='special-font'>
+<ul>
     <li>@bot 并说“发言整理”或“整理发言”可以拿到所有发言</li>
-</ol>
+    <li>@bot "help" 可以查看本页面</li>
+    <li>@bot "players" 可以查看所有参与者</li>
+</ul>
 {% endblock %}

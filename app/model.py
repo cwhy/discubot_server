@@ -52,6 +52,7 @@ class Game(VerboseObj):
     def simulate_start(self):
         self.reset()
         self.started = True
+        self.recruiting = False
         player = Player('test', 23)
         self.add_player(player)
         self.set_current_speaker(player)
@@ -73,6 +74,7 @@ class Game(VerboseObj):
         self.current_speaker = None
         self.started = False
         self.shreff = None
+        self.recruiting = False
 
     def dawn(self):
         self.isNight = False
@@ -82,6 +84,7 @@ class Game(VerboseObj):
         self.isNight = True
 
     def add_player(self, player):
+        # This will throw ValueError when player not exist
         self.players.append(player)
         self.n_players += 1
 
@@ -90,6 +93,8 @@ class Game(VerboseObj):
             if player.index == index:
                 return player
             elif player.name == name:
+                if player.index == '?' and index != '?':
+                    player.index = index
                 return player
         if name:
             raise Exception(f'Player {name} not found!')
@@ -106,6 +111,11 @@ class Game(VerboseObj):
             self.add_player(player)
         finally:
             return player
+
+    def remove_player(self, name, index):
+        player = self.get_player(name=name, index=index)
+        self.players.remove(player)
+        self.n_players -= 1
 
     def add_comment(self, comment):
         comment.id = len(self.comments)

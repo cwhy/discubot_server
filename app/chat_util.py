@@ -12,3 +12,10 @@ def get_ints(_s):
 def retrieve_At(_s):
     return re.search(r'@.+?\u2005', _s).group(0)
     # return _s.split('@')[1].split('\u2005')[0]
+
+
+def is_self(speaker_name):
+    if speaker_name == 'bot':
+        return True
+    else:
+        return False

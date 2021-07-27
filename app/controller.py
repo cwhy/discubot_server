@@ -15,9 +15,18 @@ def build_message(content):
         return jsonify(command=None)
 
 
+def build_message_multimsgs(msgs):
+    return jsonify(
+        command='msgs',
+        msgs=msgs
+    )
+
+
 def handle_chat(game, chat_obj):
     speaker_name = chat_obj['name']
-    if chat_obj['isAt'] == 'True':
+    if cu.is_self(speaker_name):
+        pass
+    elif chat_obj['isAt'] == 'True':
         content = cu.rm_At(chat_obj['Content'])
 
         if content:
@@ -52,28 +61,58 @@ def handle_director_chat(game, content):
 
 
 def handle_targeted_chat(game, content, speaker_name):
-    if 'help' in content:
+    base_url_sheet = 'https://docs.google.com/spreadsheets/d/'
+    base_url_doc = 'https://docs.google.com/document/d/'
+    params = '/edit?usp=sharing'
+    if '行程' in content:
+        return build_message(base_url_doc +
+                             '14gxFL5sz5VrVPJQC3HdT7DuBYm3XkG-HTTMHAxDoiB4' +
+                             params)
+    elif '账单' in content:
+        return build_message(base_url_sheet +
+                             '1g9BnJHIdUvwHl-OOB6meMDJKOWq0aE-57Ktl5SeGFBM' +
+                             params)
+    elif game.recruiting:
+        if '1' in content:
+            game.init_player(speaker_name, '?')
+        elif '0' in content:
+            game.remove_player(name=speaker_name)
+        return build_message('报名表已更新：discubot.com/players')
+    elif 'help' in content:
         return build_message('discubot.com/help')
+    elif 'players' in content:
+        return build_message('discubot.com/players')
     elif '发言整理' in content or '整理发言' in content:
         return build_message('discubot.com/comments')
-    elif '开局' in content:
+    elif '开始报名' in content or '报名开始' in content:
         if game.started:
             game.reset()
-            game.start()
-        else:
-            game.start()
+        game.recruiting = True
         game.set_director(speaker_name)
-        return build_message(vocab.acknowledge.gen())
+        _msg_contents = [vocab.recruit_start.gen(),
+                         '你已被钦定为导演[Sly]',
+                         '管理界面在discubot.com/director/players']
+        _users = [None, speaker_name, speaker_name]
+        _msgs = [{'user': u, 'contents': c} for u, c in zip(_users, _msg_contents)]
+        return build_message_multimsgs(_msgs)
+    elif '开局' in content:
+        if game.recruiting:
+            game.recruiting = False
+        else:
+            game.reset()
+            game.set_director(speaker_name)
+        game.start()
+        return build_message(vocab.game_start.gen())
     elif '天亮' in content:
         if speaker_name == game.director_name:
             game.dawn()
             game.set_current_speaker(None)
-        return build_message(vocab.acknowledge.gen())
+        return build_message(vocab.dawn.gen())
     elif '天黑' in content:
         if speaker_name == game.director_name:
             game.dusk()
             game.set_current_speaker(None)
-        return build_message(vocab.acknowledge.gen())
+        return build_message(vocab.dusk.gen())
     elif '号发言' in content and not ("结束" in content):
         return init_comment(game, content, speaker_name)
     elif '号自爆' in content:
@@ -87,7 +126,7 @@ def handle_targeted_chat(game, content, speaker_name):
             game.add_comment(comment)
             game.set_current_speaker(None)
             game.dusk()
-            _message = f'{player_i}号自爆了，夜幕又降临在这个诡异的微信群'
+            _message = f'{player_i}号自爆了，夜幕又降临在这个诡异的微信群🌚'
             return build_message(_message)
         else:
             _message = f'如果我没有记错的话，现在是晚上不能自爆...'
